@@ -5,7 +5,7 @@
 **Real-time tennis data over REST and WebSocket.**
 Live scores, players, rankings, match-winner market prices and model win-probability — for ATP, WTA, Challenger and ITF.
 
-[**Website**](https://livetennisapi.com) · [**Pricing**](https://livetennisapi.com/#pricing) · [**Get an API key**](https://livetennisapi.com/#pricing)
+[**Documentation**](https://docs.livetennisapi.com) · [**Website**](https://livetennisapi.com) · [**Pricing**](https://livetennisapi.com/#pricing) · [**Get an API key**](https://livetennisapi.com/#pricing)
 
 </div>
 
