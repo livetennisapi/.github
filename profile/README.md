@@ -110,6 +110,28 @@ Calling above your tier returns `403 {"error":"upgrade_required"}` — never a s
 - **Forward compatibility** — ignore unknown fields. Additive changes land within `v1`, so clients should not reject responses carrying fields they don't recognise.
 - **Errors** — `401 unauthorized` · `403 upgrade_required` · `404` · `429` (with `Retry-After`).
 
+## Documentation
+
+- **[docs.livetennisapi.com](https://docs.livetennisapi.com)** — interactive API reference
+- **[Plain-HTML reference](https://docs.livetennisapi.com/reference.html)** — the same
+  content with no JavaScript, readable by any client or crawler
+- **[OpenAPI 3.1 specification](https://github.com/livetennisapi/openapi)** — generate a
+  client in any language
+- **[llms.txt](https://livetennisapi.com/llms.txt)** — a machine-readable summary for
+  answer engines
+
+## Where to subscribe
+
+Direct is cheapest and issues a key instantly. The API is also listed on the
+marketplaces you may already be billing through:
+
+[Direct](https://livetennisapi.com/#pricing) ·
+[RapidAPI](https://rapidapi.com/contact-whTqTESH5/api/tennis-data-analytics-api3) ·
+[Apify](https://apify.com/livetennisapi/tennis-data-analytics) ·
+[API.market](https://api.market/store/live-tennis-api/tennis-data-analytics) ·
+[Zyla](https://zylalabs.com/api-marketplace/other/tennis+data+and+analytics+api/13207) ·
+[Postman](https://www.postman.com/livetennisapi)
+
 ## Status
 
 The API is live and serving. Anything published in this organisation is tested against the
