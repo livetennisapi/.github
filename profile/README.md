@@ -11,7 +11,32 @@ Live scores, players, rankings, match-winner market prices and model win-probabi
 
 ---
 
-## Quickstart
+## SDKs
+
+| | Install | |
+|---|---|---|
+| **Python** | `pip install livetennisapi` | [PyPI](https://pypi.org/project/livetennisapi/) · [source](https://github.com/livetennisapi/livetennisapi-python) |
+| **JavaScript / TypeScript** | `npm install livetennisapi` | [npm](https://www.npmjs.com/package/livetennisapi) · [source](https://github.com/livetennisapi/livetennisapi-js) |
+| **MCP server** | `npx livetennisapi-mcp` | [npm](https://www.npmjs.com/package/livetennisapi-mcp) · [source](https://github.com/livetennisapi/livetennisapi-mcp) |
+
+```python
+from livetennisapi import LiveTennisAPI
+
+with LiveTennisAPI() as client:                       # reads LIVETENNISAPI_KEY
+    for match in client.list_matches(status="live"):
+        print(match.tournament, match.score.sets)
+```
+
+```ts
+import { LiveTennisAPI } from 'livetennisapi';
+
+const { data } = await new LiveTennisAPI().listMatches({ status: 'live' });
+```
+
+Both ship a `livetennis` CLI and a reconnecting WebSocket client. The MCP server
+gives Claude, Cursor and other LLM agents 12 read-only tools over the same data.
+
+## Quickstart (raw HTTP)
 
 Every response is JSON. Authenticate with a bearer token or an `X-API-Key` header — either works.
 
