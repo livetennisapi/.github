@@ -164,6 +164,12 @@ also listed on the marketplaces you may already be billing through:
 The API is live and serving. Anything published in this organisation is tested against the
 production endpoint before release — see each repository's contract tests.
 
+## Affiliate program
+
+Know developers who need tennis data? The [affiliate program](https://affiliates.livetennisapi.com/program)
+pays 51% recurring commission for the life of every referred subscription — 30-day cookie, and the
+people you refer get 10% off. Free to join.
+
 <div align="center">
 <sub>Built by the team behind <a href="https://livetennisapi.com">livetennisapi.com</a></sub>
 </div>
