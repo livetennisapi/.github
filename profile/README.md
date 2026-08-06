@@ -107,7 +107,7 @@ curl https://api.livetennisapi.com/api/public/v1/health
 | Match events, market prices + `/history/packages` | — | — | ✅ | ✅ |
 | Rankings, match statistics, model analysis + `win_probability_p1` / `danger` | — | — | — | ✅ |
 | WebSocket live feed + webhooks | — | — | — | ✅ |
-| Rate limit | 30/min · 1,000/day | 60/min · 10k/day | 300/min · 100k/day | 600/min · 500k/day |
+| Rate limit | 30/min · 100/day | 60/min · 1k/day | 300/min · 10k/day | 600/min · 500k/day |
 | | **$0 — no card** | $9.99/mo | $29.99/mo | $99.99/mo |
 
 ¹ Also unlocked by any History plan, on top of a free core key.
