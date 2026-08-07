@@ -3,7 +3,7 @@
 <img src="https://raw.githubusercontent.com/livetennisapi/.github/main/profile/banner.jpg" alt="Live Tennis API" width="720">
 
 **Real-time tennis data over REST and WebSocket.**
-Live scores, players, rankings, match-winner market prices and model win-probability — for ATP, WTA, Challenger and ITF.
+Live scores, players, rankings, head-to-heads, a 1968–2022 results archive, match-winner market prices and model win-probability — for ATP, WTA, Challenger, ITF and juniors.
 
 [**Get a free API key — no card**](https://livetennisapi.com/subscribe/free) · [**Documentation**](https://docs.livetennisapi.com) · [**Website**](https://livetennisapi.com) · [**Pricing**](https://livetennisapi.com/#pricing)
 
@@ -35,7 +35,7 @@ const { data } = await new LiveTennisAPI().listMatches({ status: 'live' });
 ```
 
 Both ship a `livetennis` CLI and a reconnecting WebSocket client. The MCP server
-gives Claude, Cursor and other LLM agents 12 read-only tools over the same data.
+gives Claude, Cursor and other LLM agents 24 read-only tools over the same data.
 
 ## Quickstart (raw HTTP)
 
@@ -78,20 +78,27 @@ curl https://api.livetennisapi.com/api/public/v1/health
 | `GET /matches/{id}` | Full match detail — any single match, including a completed one | FREE |
 | `GET /matches/{id}/score` | Current score only — lowest-latency read | FREE |
 | `GET /matches/{id}/events` | Match events, newest first | PRO |
+| `GET /matches/{id}/prices` | Price ticks for a match's market | PRO |
 | `GET /matches/{id}/statistics` | Detailed match statistics | ULTRA |
 | `GET /matches/{id}/analysis` | Model analysis — thesis + profile | ULTRA |
 | `GET /players` | Search players by name | FREE |
 | `GET /players/{id}` | Bio, ranking, cached stats | FREE |
-| `GET /rankings` | Rankings, with as-of-date support | ULTRA |
+| `GET /h2h` | Head-to-head record between any two players | BASIC² |
+| `GET /rankings` | Ranking listings (ATP, WTA, …) | PRO |
+| `GET /rankings?player=` | One player's rank as of any date | ULTRA |
 | `GET /markets` | Match-winner market for a match | PRO |
 | `GET /markets/{id}/prices` | Recent price ticks per side | PRO |
 | `GET /fixtures` | Upcoming scheduled fixtures | FREE |
 | `GET /usage` | Your key's usage and quota — doesn't count against it | FREE |
 | `GET /history/matches` | Completed matches with derived winner | BASIC² |
 | `GET /history/matches/{id}` | One completed match from the historical tape | BASIC² |
+| `GET /history/archive/…` | 1968–2022 results archive — 1.49M matches, player bios, rankings back to 1973 | BASIC² |
+| `GET /history/matches/{id}/rally` + `GET /rally/matches` | Point-by-point rally tape | ULTRA |
+| `GET /charting/…` | Shot-by-shot match charting | ULTRA |
 | `GET /history/packages` | Historical data packages | PRO³ |
 | `GET /health` | Liveness probe (no auth) | — |
 | `WS /ws` | Live score push feed | ULTRA |
+| `GET /ws-token` | Token for the managed high-fan-out push feed | ULTRA |
 | Webhooks | Push notifications for match events | ULTRA |
 
 ¹ Bulk paging of completed matches (`GET /matches?status=completed`) needs the BASIC tier or any History plan; a single completed match by id (`GET /matches/{id}`) is FREE.
@@ -103,10 +110,10 @@ curl https://api.livetennisapi.com/api/public/v1/health
 | | FREE | BASIC | PRO | ULTRA |
 |---|:--:|:--:|:--:|:--:|
 | Live & upcoming matches, scores, players, fixtures, usage | ✅ | ✅ | ✅ | ✅ |
-| Completed-match listings + `/history/matches`¹ | — | ✅ | ✅ | ✅ |
-| Match events, market prices + `/history/packages` | — | — | ✅ | ✅ |
-| Rankings, match statistics, model analysis + `win_probability_p1` / `danger` | — | — | — | ✅ |
-| WebSocket live feed + webhooks | — | — | — | ✅ |
+| Completed-match listings, `/h2h`, `/history/matches` + the 1968–2022 archive¹ | — | ✅ | ✅ | ✅ |
+| Match events, market prices, ranking listings + `/history/packages` | — | — | ✅ | ✅ |
+| As-of rankings, match statistics, rally + charting data, model analysis + `win_probability_p1` / `danger` | — | — | — | ✅ |
+| WebSocket live feed, push feed + webhooks | — | — | — | ✅ |
 | Rate limit | 30/min · 100/day | 60/min · 1k/day | 300/min · 10k/day | 600/min · 500k/day |
 | | **$0 — no card** | $9.99/mo | $29.99/mo | $99.99/mo |
 
