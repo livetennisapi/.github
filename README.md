@@ -5,9 +5,9 @@ Organisation-level files for **[Live Tennis API](https://livetennisapi.com)**.
 | Path | What it is |
 |---|---|
 | [`profile/README.md`](profile/README.md) | The card shown on [github.com/livetennisapi](https://github.com/livetennisapi) |
-| [`SECURITY.md`](SECURITY.md) | How to report a vulnerability — applies to every repository here |
+| [`SECURITY.md`](SECURITY.md) | How to report a vulnerability across this organization |
 
-There is no code in this repository.
+The [profile artwork](profile/assets/README.md) has a small Python renderer. This repository does not contain the API service.
 
 ## Where things live
 

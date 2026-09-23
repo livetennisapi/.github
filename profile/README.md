@@ -1,29 +1,47 @@
-<div align="center">
+<a href="https://livetennisapi.com/">
+  <picture>
+    <source media="(max-width: 600px)" srcset="https://raw.githubusercontent.com/livetennisapi/.github/main/profile/assets/hero-mobile.svg">
+    <img src="https://raw.githubusercontent.com/livetennisapi/.github/main/profile/assets/hero.svg" alt="From the court. Into your code. A tennis ball connects to branching data paths." width="1280">
+  </picture>
+</a>
 
-<img src="https://raw.githubusercontent.com/livetennisapi/.github/main/profile/banner.jpg" alt="Live Tennis API" width="720">
+# Live Tennis API
 
-**Real-time tennis data over REST and WebSocket.**
-Live scores, players, rankings, head-to-heads, a 1968–2022 results archive, match-winner market prices and model win-probability — for ATP, WTA, Challenger, ITF and juniors.
+Live tennis scores and historical data for apps, dashboards and research.
+Coverage includes ATP, WTA, Challenger, ITF and junior Grand Slam draws. Available fields vary by match and tour.
 
-[**Get a free API key — no card**](https://livetennisapi.com/subscribe/free) · [**Documentation**](https://docs.livetennisapi.com) · [**Website**](https://livetennisapi.com) · [**Pricing**](https://livetennisapi.com/#pricing)
+[**Get a free API key**](https://livetennisapi.com/subscribe/free) &nbsp; / &nbsp; [Documentation](https://docs.livetennisapi.com/) &nbsp; / &nbsp; [Plans](https://livetennisapi.com/#pricing) &nbsp; / &nbsp; [Developer portal](https://livetennisapi.com/account)
 
-</div>
+## Make your first request
 
----
+Set `LIVETENNISAPI_KEY` in your environment, then fetch the matches in play.
 
-## SDKs
+```bash
+curl --fail-with-body --silent --show-error \
+  --header "Authorization: Bearer $LIVETENNISAPI_KEY" \
+  "https://api.livetennisapi.com/api/public/v1/matches?status=live"
+```
 
-| | Install | |
-|---|---|---|
-| **Python** | `pip install livetennisapi` | [PyPI](https://pypi.org/project/livetennisapi/) · [source](https://github.com/livetennisapi/livetennisapi-python) |
-| **JavaScript / TypeScript** | `npm install livetennisapi` | [npm](https://www.npmjs.com/package/livetennisapi) · [source](https://github.com/livetennisapi/livetennisapi-js) |
-| **MCP server** | `npx livetennisapi-mcp` | [npm](https://www.npmjs.com/package/livetennisapi-mcp) · [source](https://github.com/livetennisapi/livetennisapi-mcp) |
-| **Starters / examples** | Runnable break-point apps (paper-only) | [Go](https://github.com/livetennisapi/livetennisapi-starter-go) · [Node](https://github.com/livetennisapi/livetennisapi-starter-node) · [Python](https://github.com/livetennisapi/livetennisapi-starter-python) |
+Free includes live scores, players and fixtures at 30 requests/minute and 100/day. No card required. Keep paid keys server-side.
+
+## Pick your starting point
+
+- [Python client](https://github.com/livetennisapi/livetennisapi-python). Install with `pip install livetennisapi`. [PyPI package](https://pypi.org/project/livetennisapi/).
+- [JavaScript and TypeScript client](https://github.com/livetennisapi/livetennisapi-js). Install with `npm install livetennisapi`. [npm package](https://www.npmjs.com/package/livetennisapi).
+- [MCP server](https://github.com/livetennisapi/livetennisapi-mcp). Connect an AI client with `npx livetennisapi-mcp`. [npm package](https://www.npmjs.com/package/livetennisapi-mcp).
+- [OpenAPI 3.1 specification](https://github.com/livetennisapi/openapi). Generate a client for your stack or inspect the request and response schemas.
+
+The Python and JavaScript clients include a `livetennis` CLI and a reconnecting WebSocket client. Streaming requires Ultra.
+
+<details>
+<summary>Python and JavaScript examples</summary>
+
+Both clients read `LIVETENNISAPI_KEY` from the environment.
 
 ```python
 from livetennisapi import LiveTennisAPI
 
-with LiveTennisAPI() as client:                       # reads LIVETENNISAPI_KEY
+with LiveTennisAPI() as client:
     for match in client.list_matches(status="live"):
         print(match.tournament, match.score.sets)
 ```
@@ -31,153 +49,169 @@ with LiveTennisAPI() as client:                       # reads LIVETENNISAPI_KEY
 ```ts
 import { LiveTennisAPI } from 'livetennisapi';
 
-const { data } = await new LiveTennisAPI().listMatches({ status: 'live' });
+const client = new LiveTennisAPI();
+const { data } = await client.listMatches({ status: 'live' });
+console.log(data);
 ```
 
-Both ship a `livetennis` CLI and a reconnecting WebSocket client. The MCP server
-gives Claude, Cursor and other LLM agents 24 read-only tools over the same data.
+Prefer raw HTTP? The API also accepts `X-API-Key` authentication.
+Check connectivity without a key at [`GET /health`](https://api.livetennisapi.com/api/public/v1/health).
 
-## Quickstart (raw HTTP)
+</details>
 
-Every response is JSON. Authenticate with `Authorization: Bearer` (preferred) or an `X-API-Key` header — either works. A **free key** ($0, no card) covers everything below:
+## Choose your data
 
-```bash
-curl https://api.livetennisapi.com/api/public/v1/matches?status=live \
-  -H "Authorization: Bearer $LIVETENNISAPI_KEY"
-```
+- Free covers live and upcoming matches, current scores, players, fixtures and the tournament catalogue.
+- Basic adds completed-match history, point-by-point tapes where available, the 1968-2022 results archive and head-to-head records.
+- Pro adds match events, market prices, ranking tables and monthly history packages.
+- Ultra adds live model fields, match statistics, shot-level charting and streaming. It also includes as-of rankings and webhooks.
 
-```jsonc
-{
-  "data": [
-    {
-      "id": 18953,
-      "tournament": "ATP Wimbledon",
-      "surface": "grass",
-      "round": "R16",
-      "status": "live",
-      "players": { "p1": { "name": "…", "ranking": 3 }, "p2": { "name": "…" } },
-      "score": { "sets": [1, 1], "games": [[6, 3, 2], [4, 6, 1]], "points": ["40", "30"], "server": 1 }
-    }
-  ],
-  "meta": { "limit": 50, "offset": 0, "count": 1, "total": 1, "has_more": false }
-}
-```
+Each plan includes the plans below it. [Compare current plans](https://livetennisapi.com/#pricing) or [upgrade an existing key](https://livetennisapi.com/subscribe/upgrade).
+The [Historical Data API](https://livetennisapi.com/historical-tennis-data-api) also has standalone plans.
 
-No key yet? [Grab a free one](https://livetennisapi.com/subscribe/free) — or hit the liveness probe, which needs no auth:
+Results, point-by-point records and shot-level charting have different coverage. Check the [API reference](https://docs.livetennisapi.com/reference.html) before choosing data for your project.
 
-```bash
-curl https://api.livetennisapi.com/api/public/v1/health
-# {"status":"ok","version":"v1"}
-```
+<details>
+<summary>Endpoint guide and access rules</summary>
 
-## Endpoints
+The base URL is `https://api.livetennisapi.com/api/public/v1`.
+This guide covers the main routes. The [full reference](https://docs.livetennisapi.com/reference.html) includes parameters and plan exceptions.
 
-| Endpoint | Returns | Tier |
-|---|---|:--:|
-| `GET /matches` | Matches by lifecycle — `live` and `upcoming` | FREE¹ |
-| `GET /matches/{id}` | Full match detail — any single match, including a completed one | FREE |
-| `GET /matches/{id}/score` | Current score only — lowest-latency read | FREE |
-| `GET /matches/{id}/events` | Match events, newest first | PRO |
-| `GET /matches/{id}/prices` | Price ticks for a match's market | PRO |
-| `GET /matches/{id}/statistics` | Detailed match statistics | ULTRA |
-| `GET /matches/{id}/analysis` | Model analysis — thesis + profile | ULTRA |
-| `GET /players` | Search players by name | FREE |
-| `GET /players/{id}` | Bio, ranking, cached stats | FREE |
-| `GET /h2h` | Head-to-head record between any two players | BASIC² |
-| `GET /rankings` | Ranking listings (ATP, WTA, …) | PRO |
-| `GET /rankings?player=` | One player's rank as of any date | ULTRA |
-| `GET /markets` | Match-winner market for a match | PRO |
-| `GET /markets/{id}/prices` | Recent price ticks per side | PRO |
-| `GET /fixtures` | Upcoming scheduled fixtures | FREE |
-| `GET /usage` | Your key's usage and quota — doesn't count against it | FREE |
-| `GET /history/matches` | Completed matches with derived winner | BASIC² |
-| `GET /history/matches/{id}` | One completed match from the historical tape | BASIC² |
-| `GET /history/archive/…` | 1968–2022 results archive — 1.49M matches, player bios, rankings back to 1973 | BASIC² |
-| `GET /history/matches/{id}/rally` + `GET /rally/matches` | Point-by-point rally tape | ULTRA |
-| `GET /charting/…` | Shot-by-shot match charting | ULTRA |
-| `GET /history/packages` | Historical data packages | PRO³ |
-| `GET /health` | Liveness probe (no auth) | — |
-| `WS /ws` | Live score push feed | ULTRA |
-| `GET /ws-token` | Token for the managed high-fan-out push feed | ULTRA |
-| Webhooks | Push notifications for match events | ULTRA |
+| Route | Data |
+| --- | --- |
+| `GET /matches` | Live, upcoming or completed matches |
+| `GET /matches/{id}` | One match |
+| `GET /matches/{id}/score` | Current score |
+| `GET /matches/{id}/events` | Match events |
+| `GET /matches/{id}/points` | Recorded live points where covered |
+| `GET /matches/{id}/prices` | Match market prices |
+| `GET /matches/{id}/statistics` | Match statistics |
+| `GET /matches/{id}/analysis` | Model analysis |
+| `GET /players` and `GET /players/{id}` | Player search and profiles |
+| `GET /h2h` | Head-to-head records |
+| `GET /rankings` | Ranking listings or a player's as-of record |
+| `GET /markets` and `GET /markets/{id}/prices` | Match-winner markets and prices |
+| `GET /fixtures` | Scheduled fixtures |
+| `GET /tournaments` | Tournament catalogue |
+| `GET /usage` | Your quota and usage |
+| `GET /history/matches` | Completed-match listings |
+| `GET /history/matches/{id}` | A match's point-by-point tape |
+| `GET /history/coverage` | Measured historical coverage |
+| `GET /history/archive/...` | The 1968-2022 results archive |
+| `GET /history/matches/{id}/rally` and `GET /rally/matches` | Shot-by-shot charted data |
+| `GET /charting/...` | Match and player charting statistics |
+| `GET /history/packages` | Historical downloads |
+| `GET /health` | Liveness check without authentication |
+| `WS /ws` and `GET /ws-token` | Live score feeds |
+| Webhooks | Match event notifications |
 
-¹ Bulk paging of completed matches (`GET /matches?status=completed`) needs the BASIC tier or any History plan; a single completed match by id (`GET /matches/{id}`) is FREE.
-² Or any History plan — History plans work on top of a free core key.
-³ Or History Pro and above.
+Completed-match listings require Basic or a History plan. A single completed match at `/matches/{id}` is available on Free.
+Free also includes a limited monthly history sample. See the [current access rules](https://docs.livetennisapi.com/reference.html#plans) for its limits.
 
-## Tiers
+The results archive spans 1968-2022. Reconstructed archive tapes cover some matches from 2013-2022, with null timestamps and no model probabilities.
+Those tapes require Ultra or an active History plan. Bulk download rules differ from single-match access.
 
-| | FREE | BASIC | PRO | ULTRA |
-|---|:--:|:--:|:--:|:--:|
-| Live & upcoming matches, scores, players, fixtures, usage | ✅ | ✅ | ✅ | ✅ |
-| Completed-match listings, `/h2h`, `/history/matches` + the 1968–2022 archive¹ | — | ✅ | ✅ | ✅ |
-| Match events, market prices, ranking listings + `/history/packages` | — | — | ✅ | ✅ |
-| As-of rankings, match statistics, rally + charting data, model analysis + `win_probability_p1` / `danger` | — | — | — | ✅ |
-| WebSocket live feed, push feed + webhooks | — | — | — | ✅ |
-| Rate limit | 30/min · 100/day | 60/min · 1k/day | 300/min · 10k/day | 600/min · 500k/day |
-| | **$0 — no card** | $9.99/mo | $29.99/mo | $99.99/mo |
+Historical tapes from 2023 onward declare their coverage and source. Model outputs appear only where computed.
+Shot-level data is curated and does not cover every match.
 
-¹ Also unlocked by any History plan, on top of a free core key.
+Calling above your plan returns `403 upgrade_required`.
+The reference documents the data fields and exceptions for each route.
 
-[**Start free**](https://livetennisapi.com/subscribe/free) — a FREE key is fine to use from browser code (CORS is open, GET-only, no credentials mode); keep paid keys server-side.
+</details>
 
-Calling above your tier returns `403 {"error":"upgrade_required"}` — never a silent
-empty result. Upgrade any time at [livetennisapi.com/subscribe/upgrade](https://livetennisapi.com/subscribe/upgrade).
+<details>
+<summary>Response conventions</summary>
 
-## Conventions
+- Lists return `{data, meta}`. Single-resource reads return the resource.
+- Timestamps use UTC ISO 8601 with a `Z` suffix where a real timestamp exists.
+- Page with `limit` and `offset`. Continue while `meta.has_more` is true. The default limit is 50 and the maximum is 200.
+- Scores use player-major arrays. `games: [[6, 3, 2], [4, 6, 1]]` means 6-4, 3-6, 2-1.
+- Ignore unknown fields so additive changes in `v1` do not break your client.
+- Handle `401`, `403`, `404` and `429` responses. Follow `Retry-After` when rate limited.
 
-- **Base URL** — `https://api.livetennisapi.com/api/public/v1`
-- **Timestamps** — UTC ISO 8601 with a `Z` suffix, everywhere.
-- **Lists** return `{data, meta}`; single resources return the object directly.
-- **Pagination** — `limit` (default 50, max 200) and `offset`; page while `meta.has_more` is true (`meta.total` may be null).
-- **Score shape** — `sets` is `[sets_p1, sets_p2]`; `games` is `[games_p1, games_p2]` where each side is a *per-set* list, so `[[6,3,2],[4,6,1]]` reads 6-4, 3-6, 2-1.
-- **Forward compatibility** — ignore unknown fields. Additive changes land within `v1`, so clients should not reject responses carrying fields they don't recognise.
-- **Errors** — `401 unauthorized` · `403 upgrade_required` · `404` · `429` (honour `Retry-After`; the body's `resets_at` and the `X-RateLimit-Reset` header give the exact UTC instant your quota resets).
+</details>
 
-## Documentation
+## Build with Synapse
 
-- **[docs.livetennisapi.com](https://docs.livetennisapi.com)** — interactive API reference
-- **[Plain-HTML reference](https://docs.livetennisapi.com/reference.html)** — the same
-  content with no JavaScript, readable by any client or crawler
-- **[OpenAPI 3.1 specification](https://github.com/livetennisapi/openapi)** — generate a
-  client in any language
-- **[llms.txt](https://livetennisapi.com/llms.txt)** — a machine-readable summary for
-  answer engines
+[Synapse](https://synapsereality.io/) builds custom software, AI integrations and automations.
+Have a product in mind? [Talk to Synapse](https://synapsereality.io/contact/) about building it.
 
-## All repositories
+## More ways to build
 
-| | |
-|---|---|
-| **Official clients** | [Python](https://github.com/livetennisapi/livetennisapi-python) · [JavaScript/TypeScript](https://github.com/livetennisapi/livetennisapi-js) · [Go](https://github.com/livetennisapi/livetennisapi-go) · [Swift](https://github.com/livetennisapi/livetennisapi-swift) · [.NET](https://github.com/livetennisapi/livetennisapi-dotnet) · [Dart/Flutter](https://github.com/livetennisapi/livetennisapi-dart) · [PHP](https://github.com/livetennisapi/livetennisapi-php) · [Laravel](https://github.com/livetennisapi/livetennisapi-laravel) |
-| **Agents & LLM tooling** | [MCP server](https://github.com/livetennisapi/livetennisapi-mcp) · [Vercel AI SDK tools](https://github.com/livetennisapi/livetennisapi-ai) · [Codex plugin](https://github.com/livetennisapi/livetennisapi-codex-plugin) · [Dify plugin](https://github.com/livetennisapi/livetennisapi-dify-plugin) · [Gemini CLI](https://github.com/livetennisapi/gemini-cli-livetennis) · [Zed](https://github.com/livetennisapi/zed-livetennis-mcp) · [LangChain](https://github.com/livetennisapi/langchain-livetennis) · [Haystack](https://github.com/livetennisapi/livetennisapi-haystack) |
-| **Automation & apps** | [n8n](https://github.com/livetennisapi/n8n-nodes-livetennisapi) · [Node-RED](https://github.com/livetennisapi/node-red-contrib-livetennis) · [Home Assistant](https://github.com/livetennisapi/ha-livetennis) · [Obsidian](https://github.com/livetennisapi/obsidian-live-tennis) · [VS Code](https://github.com/livetennisapi/livetennisapi-vscode) · [Flow Launcher](https://github.com/livetennisapi/Flow.Launcher.Plugin.LiveTennis) · [MagicMirror²](https://github.com/livetennisapi/MMM-LiveTennis) · [Red-DiscordBot](https://github.com/livetennisapi/livetennis-redbot) |
-| **Starters / examples** | [Go](https://github.com/livetennisapi/livetennisapi-starter-go) · [Node](https://github.com/livetennisapi/livetennisapi-starter-node) · [Python](https://github.com/livetennisapi/livetennisapi-starter-python) |
-| **Prediction markets** | [Polymarket tennis trading toolkit](https://github.com/livetennisapi/polymarket-tennis) — discover tennis event markets, match them to live matches, watch market prices vs live scores (observe-only) |
-| **Spec & meta** | [OpenAPI 3.1](https://github.com/livetennisapi/openapi) · [.github](https://github.com/livetennisapi/.github) (this profile) |
+<details>
+<summary>Client libraries, integrations and example apps</summary>
 
-## Where to subscribe
+### Client libraries
 
-Direct is cheapest, has the only **free tier**, and issues a key instantly. The API is
-also listed on the marketplaces you may already be billing through:
+[Python](https://github.com/livetennisapi/livetennisapi-python),
+[JavaScript and TypeScript](https://github.com/livetennisapi/livetennisapi-js),
+[Go](https://github.com/livetennisapi/livetennisapi-go),
+[Swift](https://github.com/livetennisapi/livetennisapi-swift),
+[.NET](https://github.com/livetennisapi/livetennisapi-dotnet),
+[Dart and Flutter](https://github.com/livetennisapi/livetennisapi-dart),
+[PHP](https://github.com/livetennisapi/livetennisapi-php),
+[Laravel](https://github.com/livetennisapi/livetennisapi-laravel).
 
-[Direct — free tier](https://livetennisapi.com/subscribe/free) ·
-[Direct — paid plans](https://livetennisapi.com/#pricing) ·
-[RapidAPI](https://rapidapi.com/contact-whTqTESH5/api/tennis-data-analytics-api3) ·
-[Apify](https://apify.com/livetennisapi/tennis-data-analytics) ·
-[API.market](https://api.market/store/live-tennis-api/tennis-data-analytics) ·
-[Postman](https://www.postman.com/livetennisapi)
+### AI tools
 
-## Status
+[MCP server](https://github.com/livetennisapi/livetennisapi-mcp),
+[Vercel AI SDK](https://github.com/livetennisapi/livetennisapi-ai),
+[Codex plugin](https://github.com/livetennisapi/livetennisapi-codex-plugin),
+[Dify](https://github.com/livetennisapi/livetennisapi-dify-plugin),
+[Gemini CLI](https://github.com/livetennisapi/gemini-cli-livetennis),
+[Zed](https://github.com/livetennisapi/zed-livetennis-mcp),
+[LangChain](https://github.com/livetennisapi/langchain-livetennis),
+[Haystack](https://github.com/livetennisapi/livetennisapi-haystack).
 
-The API is live and serving. Anything published in this organisation is tested against the
-production endpoint before release — see each repository's contract tests.
+### Automation and apps
 
-## Affiliate program
+[n8n](https://github.com/livetennisapi/n8n-nodes-livetennisapi),
+[Node-RED](https://github.com/livetennisapi/node-red-contrib-livetennis),
+[Home Assistant](https://github.com/livetennisapi/ha-livetennis),
+[Obsidian](https://github.com/livetennisapi/obsidian-live-tennis),
+[VS Code](https://github.com/livetennisapi/livetennisapi-vscode),
+[Flow Launcher](https://github.com/livetennisapi/Flow.Launcher.Plugin.LiveTennis),
+[MagicMirror](https://github.com/livetennisapi/MMM-LiveTennis),
+[Red-DiscordBot](https://github.com/livetennisapi/livetennis-redbot).
 
-Know developers who need tennis data? The [affiliate program](https://affiliates.livetennisapi.com/program)
-pays 51% recurring commission for the life of every referred subscription — 30-day cookie, and the
-people you refer get 10% off. Free to join.
+### Example apps and research
 
-<div align="center">
-<sub>Built by the team behind <a href="https://livetennisapi.com">livetennisapi.com</a></sub>
-</div>
+The [Go](https://github.com/livetennisapi/livetennisapi-starter-go),
+[Node](https://github.com/livetennisapi/livetennisapi-starter-node) and
+[Python](https://github.com/livetennisapi/livetennisapi-starter-python) starters demonstrate break-point apps with paper orders only.
+
+The [Polymarket tennis toolkit](https://github.com/livetennisapi/polymarket-tennis) compares tennis market prices with live match state. It is observe-only.
+The [academic dataset](https://github.com/livetennisapi/livetennisapi-data) includes research access details and data loaders.
+
+[Browse all repositories](https://github.com/orgs/livetennisapi/repositories).
+
+</details>
+
+<details>
+<summary>Documentation, marketplaces and partners</summary>
+
+### Documentation
+
+[Interactive API reference](https://docs.livetennisapi.com/),
+[plain HTML reference](https://docs.livetennisapi.com/reference.html),
+[OpenAPI specification](https://github.com/livetennisapi/openapi),
+[llms.txt](https://livetennisapi.com/llms.txt).
+
+### Marketplaces
+
+Subscribe [directly](https://livetennisapi.com/#pricing) or through
+[RapidAPI](https://rapidapi.com/contact-whTqTESH5/api/tennis-data-analytics-api3),
+[Apify](https://apify.com/livetennisapi/tennis-data-analytics) or
+[API.market](https://api.market/store/live-tennis-api/tennis-data-analytics).
+Explore requests in the [Postman workspace](https://www.postman.com/livetennisapi).
+
+### Partners
+
+Refer developers through the [affiliate program](https://affiliates.livetennisapi.com/program).
+The program page has the current terms and commission details.
+
+</details>
+
+---
+
+[livetennisapi.com](https://livetennisapi.com/) &nbsp; / &nbsp; [hello@livetennisapi.com](mailto:hello@livetennisapi.com) &nbsp; / &nbsp; [Report a security issue](https://github.com/livetennisapi/.github/blob/main/SECURITY.md)
