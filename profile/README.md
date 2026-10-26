@@ -10,7 +10,7 @@
 Live tennis scores and historical data for apps, dashboards and research.
 Coverage includes ATP, WTA, Challenger, ITF and junior Grand Slam draws. Available fields vary by match and tour.
 
-[**Get a free API key**](https://livetennisapi.com/subscribe/free) &nbsp; / &nbsp; [Documentation](https://docs.livetennisapi.com/) &nbsp; / &nbsp; [Plans](https://livetennisapi.com/#pricing) &nbsp; / &nbsp; [Developer portal](https://livetennisapi.com/account)
+[**Get a free API key**](https://livetennisapi.com/subscribe/free) · [Documentation](https://docs.livetennisapi.com/) · [Plans](https://livetennisapi.com/#pricing) · [Developer portal](https://livetennisapi.com/account)
 
 ## Make your first request
 
@@ -214,4 +214,4 @@ The program page has the current terms and commission details.
 
 ---
 
-[livetennisapi.com](https://livetennisapi.com/) &nbsp; / &nbsp; [hello@livetennisapi.com](mailto:hello@livetennisapi.com) &nbsp; / &nbsp; [Report a security issue](https://github.com/livetennisapi/.github/blob/main/SECURITY.md)
+[livetennisapi.com](https://livetennisapi.com/) · [hello@livetennisapi.com](mailto:hello@livetennisapi.com) · [Report a security issue](https://github.com/livetennisapi/.github/blob/main/SECURITY.md)
